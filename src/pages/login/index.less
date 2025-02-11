@@ -1,0 +1,30 @@
+.container {
+  background: url('https://asset-1306470651.cos.ap-shanghai.myqcloud.com/blog-admin/c3f153dd-80a0-40a8-9a54-a3b7d6717ab8.jpg')
+    no-repeat center center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  :global {
+    .form {
+      position: absolute;
+      padding: 20px 25px 10px 25px;
+      width: 400px;
+      background-color: #fff;
+      border-radius: 8px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-sizing: border-box;
+    }
+    .title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .confirm-btn {
+      width: 100%;
+    }
+  }
+}
