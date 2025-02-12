@@ -18,6 +18,7 @@ import {
   Typography,
 } from 'antd';
 import { InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 const layout = {
   labelCol: { span: 6, flex: 1 },
@@ -53,6 +54,66 @@ export default memo(function List() {
         title: '角色',
         render: (dom, data) => {
           return data?.role?.name || '-';
+        },
+      },
+      {
+        dataIndex: 'createAt',
+        title: '创建时间',
+        valueType: 'dateRange',
+        fieldProps: {
+          placeholder: ['请选择开始时间', '请选择结束时间'],
+        },
+        render: (dom, data) => {
+          return dayjs(data.createAt)
+            .add(-8, 'h')
+            .format('YYYY-MM-DD HH:mm:ss');
+        },
+        search: {
+          transform: (value, name) => {
+            if (!value)
+              return {
+                [name]: void 0,
+              };
+            const [start, end] = value;
+            let res = {
+              [name]: [
+                dayjs(start).startOf('day').add(8, 'h').toISOString(),
+                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+              ],
+            };
+
+            return res;
+          },
+        },
+      },
+      {
+        dataIndex: 'updateAt',
+        title: '更新时间',
+        valueType: 'dateRange',
+        fieldProps: {
+          placeholder: ['请选择开始时间', '请选择结束时间'],
+        },
+        search: {
+          transform: (value, name) => {
+            if (!value)
+              return {
+                [name]: void 0,
+              };
+            const [start, end] = value;
+            let res = {
+              [name]: [
+                dayjs(start).startOf('day').add(8, 'h').toISOString(),
+                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+              ],
+            };
+
+            return res;
+          },
+        },
+        render: (dom, data) => {
+          return dayjs(data.updateAt)
+            .add(-8, 'h')
+            .format('YYYY-MM-DD HH:mm:ss');
         },
       },
       {
@@ -106,6 +167,7 @@ export default memo(function List() {
         message.success('操作成功');
         setOpen(false);
         actionRef.current.reload();
+        form.resetFields();
       });
     });
   }, []);
@@ -177,14 +239,13 @@ export default memo(function List() {
   }, [handleAdd]);
 
   const request = useCallback(
-    async ({ current, pageSize }: { current: number; pageSize: number }) => {
-      const formData = formRef.current?.getFieldsValue();
+    async (params) => {
+      const { current, ...rest } = params;
       const {
         data: { list, total },
       } = await getUserList({
-        ...formData,
+        ...rest,
         page: current,
-        pageSize,
       });
       return {
         success: true,

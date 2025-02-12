@@ -9,6 +9,7 @@ import { Button, message, Modal, Space, Tooltip, Typography } from 'antd';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useHistory, useModel } from 'umi';
 import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 export default memo(function List() {
   const history = useHistory();
@@ -31,6 +32,59 @@ export default memo(function List() {
         title: '作者',
         render: (dom, data) => {
           return data?.author?.name || '-';
+        },
+      },
+      {
+        dataIndex: 'createAt',
+        title: '创建时间',
+        valueType: 'dateRange',
+        fieldProps: {
+          placeholder: ['请选择开始时间', '请选择结束时间'],
+        },
+        render: (dom, data) => {
+          return dayjs(data.createAt)
+            .add(-8, 'h')
+            .format('YYYY-MM-DD HH:mm:ss');
+        },
+        search: {
+          transform: (value, name) => {
+            const [start, end] = value;
+            let res = {
+              [name]: [
+                dayjs(start).startOf('day').add(8, 'h').toISOString(),
+                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+              ],
+            };
+
+            return res;
+          },
+        },
+      },
+      {
+        dataIndex: 'updateAt',
+        title: '更新时间',
+        valueType: 'dateRange',
+        fieldProps: {
+          placeholder: ['请选择开始时间', '请选择结束时间'],
+          format: 'YYYY-MM-DD HH:mm:ss',
+        },
+        search: {
+          transform: (value, name) => {
+            const [start, end] = value;
+            let res = {
+              [name]: [
+                dayjs(start).startOf('day').add(8, 'h').toISOString(),
+                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+              ],
+            };
+
+            return res;
+          },
+        },
+        render: (dom, data) => {
+          return dayjs(data.updateAt)
+            .add(-8, 'h')
+            .format('YYYY-MM-DD HH:mm:ss');
         },
       },
       {
@@ -100,14 +154,14 @@ export default memo(function List() {
   }, [actionRef]);
 
   const request = useCallback(
-    async ({ current, pageSize }: { current: number; pageSize: number }) => {
-      const formData = formRef.current?.getFieldsValue();
+    async (params) => {
+      const { current, ...rest } = params;
+
       const {
         data: { list, total },
       } = await getList({
-        ...formData,
+        ...rest,
         page: current,
-        pageSize,
       });
       return {
         success: true,
