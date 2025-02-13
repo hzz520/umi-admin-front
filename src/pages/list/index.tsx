@@ -42,9 +42,7 @@ export default memo(function List() {
           placeholder: ['请选择开始时间', '请选择结束时间'],
         },
         render: (dom, data) => {
-          return dayjs(data.createAt)
-            .add(-8, 'h')
-            .format('YYYY-MM-DD HH:mm:ss');
+          return dayjs(data.createAt).format('YYYY-MM-DD HH:mm:ss');
         },
         search: {
           transform: (value, name) => {
@@ -82,9 +80,7 @@ export default memo(function List() {
           },
         },
         render: (dom, data) => {
-          return dayjs(data.updateAt)
-            .add(-8, 'h')
-            .format('YYYY-MM-DD HH:mm:ss');
+          return dayjs(data.updateAt).format('YYYY-MM-DD HH:mm:ss');
         },
       },
       {

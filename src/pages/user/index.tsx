@@ -4,7 +4,7 @@ import {
   ProFormInstance,
   ProTable,
 } from '@ant-design/pro-components';
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { addOrUpdateUser, delUser, getUserList } from '@/service/user';
 import {
@@ -64,9 +64,7 @@ export default memo(function List() {
           placeholder: ['请选择开始时间', '请选择结束时间'],
         },
         render: (dom, data) => {
-          return dayjs(data.createAt)
-            .add(-8, 'h')
-            .format('YYYY-MM-DD HH:mm:ss');
+          return dayjs(data.createAt).format('YYYY-MM-DD HH:mm:ss');
         },
         search: {
           transform: (value, name) => {
@@ -111,9 +109,7 @@ export default memo(function List() {
           },
         },
         render: (dom, data) => {
-          return dayjs(data.updateAt)
-            .add(-8, 'h')
-            .format('YYYY-MM-DD HH:mm:ss');
+          return dayjs(data.updateAt).format('YYYY-MM-DD HH:mm:ss');
         },
       },
       {
