@@ -38,6 +38,13 @@ const errorHandler = (error: { response: Response }): Response => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
+    if (response.status === 401) {
+      if (
+        !['/user/login', '/user/registry'].includes(history.location.pathname)
+      ) {
+        history.push('/user/login');
+      }
+    }
   }
   return response;
 };
@@ -65,7 +72,6 @@ export const request = (url: string, options?: RequestOptionsInit) => {
     }
 
     const error = handleStatusError(res.code, url, res.msg);
-    console.log('res', res, error);
 
     if (error) reject(error);
 

@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import { Avatar, Button, Dropdown, MenuProps, Space, Typography } from 'antd';
 import { useHistory, useModel } from 'umi';
+import { logOut } from '@/service/user';
 
 export const RightContent = memo(() => {
   const history = useHistory();
@@ -46,10 +47,12 @@ export const RightContent = memo(() => {
       ],
       onClick: (e) => {
         if (e.key === 'logout') {
-          localStorage.removeItem('token');
-          setTimeout(() => {
-            history.push('/user/login');
-          }, 0);
+          logOut().then(() => {
+            localStorage.removeItem('token');
+            setTimeout(() => {
+              history.push('/user/login');
+            }, 0);
+          });
         }
         if (e.key === 'changePwd') {
           history.push('/user/changePwd');

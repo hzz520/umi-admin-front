@@ -7,6 +7,12 @@ export async function login(data) {
   });
 }
 
+export async function logOut() {
+  return request('/user/logout', {
+    method: 'post',
+  });
+}
+
 export async function registry(data) {
   return request('/user/registry', {
     method: 'post',
