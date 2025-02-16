@@ -9,6 +9,8 @@ import { history } from 'umi';
 import { getUser } from './service/user';
 import { RightContent } from './rightContent';
 
+import { configureDevtool } from 'mobx-react-devtools';
+
 export async function getInitialState() {
   const { data: user } = await getUser();
   return {
@@ -57,3 +59,9 @@ export const layout = ({
     ...initialState?.settings,
   };
 };
+
+configureDevtool({
+  logEnabled: true,
+  updatesEnabled: true,
+  graphEnabled: true,
+});

@@ -40,12 +40,15 @@ export default memo(
     const canEdit = useMemo(() => {
       let code = initialState?.user?.role?.code;
       let userName = initialState?.user?.name;
-      let isGuest = !code || code === 4;
+      let isGuest = !code || code === 'guest';
 
       if (location.pathname === '/article/add') {
         return !isGuest;
       }
-      return ([1, 2].includes(code) || name === userName) && !isGuest;
+      return (
+        (['superAdmin', 'admin'].includes(code) || name === userName) &&
+        !isGuest
+      );
     }, [location, initialState, name]);
 
     // 工具栏配置

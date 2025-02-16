@@ -15,7 +15,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/article/list',
+      redirect: '/form/list',
     },
     {
       path: '/user/:type',
@@ -27,6 +27,47 @@ export default defineConfig({
       // 不展示菜单
       menuRender: false,
       hideInMenu: true,
+    },
+    {
+      path: '/form',
+      name: '表单引擎',
+      component: '@/layout/index',
+      icon: 'form',
+      routes: [
+        {
+          path: '/form',
+          redirect: '/form/list',
+        },
+        {
+          path: '/form/list',
+          component: '@/pages/form/index',
+          name: '表单列表',
+        },
+        {
+          path: '/form/add',
+          name: '新增',
+          breadcrumbName: '新增',
+          component: '@/pages/form/wujie-form-marking',
+          // headerRender: false,
+          // 不展示页脚
+          footerRender: false,
+          // 不展示菜单
+          menuRender: false,
+          hideInMenu: true,
+        },
+        {
+          path: '/form/edit',
+          name: '编辑',
+          breadcrumbName: '编辑',
+          component: '@/pages/form/wujie-form-marking',
+          // headerRender: false,
+          // 不展示页脚
+          footerRender: false,
+          // 不展示菜单
+          menuRender: false,
+          hideInMenu: true,
+        },
+      ],
     },
     {
       path: '/article',
@@ -99,17 +140,30 @@ export default defineConfig({
   fastRefresh: {},
   proxy: {
     '/api': {
-      target: 'http://192.168.1.6:82',
+      target: 'http://localhost:82',
       changeOrigin: true,
     },
   },
-  outputPath: './blog',
+  outputPath: './admin',
   hash: true,
   manifest: {
     fileName: 'asset-manifest.json',
   },
-  chunks: ['vendors', 'antd', 'rect', 'lodash', 'wangeditor', 'umi'],
+  // mfsu:{},
+  chunks: [
+    'runtime~umi',
+    'vendors',
+    'antd',
+    'rect',
+    'lodash',
+    'wangeditor',
+    'umi',
+  ],
   chainWebpack: function (config) {
+    // config.optimization.minimize(true);
+    config.optimization.runtimeChunk({
+      name: 'runtime~umi',
+    });
     config.optimization.splitChunks({
       chunks: 'all', //async异步代码分割 initial同步代码分割 all同步异步分割都开启
       automaticNameDelimiter: '.',

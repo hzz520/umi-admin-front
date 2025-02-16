@@ -49,8 +49,8 @@ export default memo(function List() {
             const [start, end] = value;
             let res = {
               [name]: [
-                dayjs(start).startOf('day').add(8, 'h').toISOString(),
-                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+                dayjs(start).startOf('day').toISOString(),
+                dayjs(end).endOf('day').toISOString(),
               ],
             };
 
@@ -64,15 +64,14 @@ export default memo(function List() {
         valueType: 'dateRange',
         fieldProps: {
           placeholder: ['请选择开始时间', '请选择结束时间'],
-          format: 'YYYY-MM-DD HH:mm:ss',
         },
         search: {
           transform: (value, name) => {
             const [start, end] = value;
             let res = {
               [name]: [
-                dayjs(start).startOf('day').add(8, 'h').toISOString(),
-                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+                dayjs(start).startOf('day').toISOString(),
+                dayjs(end).endOf('day').toISOString(),
               ],
             };
 
@@ -89,8 +88,8 @@ export default memo(function List() {
         render(dom, record) {
           let code = initialState?.user?.role?.code;
           const canOprate =
-            code !== 4 &&
-            ([1, 2].includes(code) ||
+            code !== 'guest' &&
+            (['superAdmin', 'admin'].includes(code) ||
               record.author.name === initialState?.user?.name);
           return [
             <Typography.Link key="detail" onClick={() => handleDetail(record)}>

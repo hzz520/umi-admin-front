@@ -75,8 +75,8 @@ export default memo(function List() {
             const [start, end] = value;
             let res = {
               [name]: [
-                dayjs(start).startOf('day').add(8, 'h').toISOString(),
-                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+                dayjs(start).startOf('day').toISOString(),
+                dayjs(end).endOf('day').toISOString(),
               ],
             };
 
@@ -100,8 +100,8 @@ export default memo(function List() {
             const [start, end] = value;
             let res = {
               [name]: [
-                dayjs(start).startOf('day').add(8, 'h').toISOString(),
-                dayjs(end).endOf('day').add(8, 'h').toISOString(),
+                dayjs(start).startOf('day').toISOString(),
+                dayjs(end).endOf('day').toISOString(),
               ],
             };
 
@@ -117,7 +117,8 @@ export default memo(function List() {
         title: '操作',
         render(dom, record) {
           const { code } = initialState?.user?.role || {};
-          const canEdit = code && code === 1 && record.role?.code !== 1;
+          const canEdit =
+            code && code === 'superAdmin' && record.role?.code !== 'superAdmin';
           return [
             <Typography.Link
               disabled={!canEdit}
@@ -220,7 +221,7 @@ export default memo(function List() {
 
   const toolBarRender = useCallback(() => {
     const { code } = initialState?.user?.role || {};
-    const canEdit = code && code === 1;
+    const canEdit = code && code === 'superAdmin';
     return [
       <Button
         key="button"
