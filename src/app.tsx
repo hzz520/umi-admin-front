@@ -8,8 +8,10 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import { getUser } from './service/user';
 import { RightContent } from './rightContent';
+import WujieReact from 'wujie-react';
 
 import { configureDevtool } from 'mobx-react-devtools';
+import { message } from 'antd';
 
 export async function getInitialState() {
   const { data: user } = await getUser();
@@ -59,6 +61,11 @@ export const layout = ({
     ...initialState?.settings,
   };
 };
+
+WujieReact.bus.$on('logout', () => {
+  message.error('登录失效');
+  history.replace('/user/login');
+});
 
 configureDevtool({
   logEnabled: true,

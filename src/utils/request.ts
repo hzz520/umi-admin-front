@@ -130,7 +130,16 @@ const BACKENDSTATUSERRORCONFIG = {
     '后台服务器异常请查阅日志!',
     (errorText: string, url: string) => {
       notification.error({
-        message: `请求错误 ${status}: ${url}`,
+        message: `请求错误 : ${url}`,
+        description: errorText,
+      });
+    },
+  ],
+  B0002: [
+    '后台api未找到',
+    (errorText: string, url: string) => {
+      notification.error({
+        message: `请求错误 : ${url}`,
         description: errorText,
       });
     },
@@ -138,11 +147,10 @@ const BACKENDSTATUSERRORCONFIG = {
   C0001: [
     '后台服务器异常请查阅日志!',
     (errorText: string, url: string) => {
-      // notification.error({
-      //   // message: `请求错误 ${status}: ${url}`,
-      //   description: errorText,
-      // });
-      message.error(`请求错误 ${status}: ${url} ${errorText}`);
+      notification.error({
+        message: `请求错误 : ${url}`,
+        description: errorText,
+      });
     },
   ],
 };
@@ -156,7 +164,6 @@ urequest.use(async (ctx, next) => {
   };
 
   await next();
-  const { res } = ctx;
 
   // if (process.env.NODE_ENV === 'development') {
   //   console.log(`API: ${req.url.replace(prefix, '')} \r\n返回的数据: `, res.data, ' \r\n');

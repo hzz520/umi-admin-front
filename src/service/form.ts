@@ -14,6 +14,13 @@ export async function getVersions(data) {
   });
 }
 
+export async function copy(data) {
+  return request('/dynamic-form/copy', {
+    method: 'post',
+    data,
+  });
+}
+
 export async function del(data) {
   return request('/dynamic-form/del', {
     method: 'post',

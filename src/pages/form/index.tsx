@@ -1,4 +1,10 @@
-import { del, delByVersionId, getList, getVersions } from '@/service/form';
+import {
+  copy,
+  del,
+  delByVersionId,
+  getList,
+  getVersions,
+} from '@/service/form';
 import {
   ActionType,
   ProColumns,
@@ -126,7 +132,7 @@ export default memo(function List() {
       {
         valueType: 'option',
         title: '操作',
-        width: 220,
+        width: 260,
         render(dom, record) {
           let code = initialState?.user?.role?.code;
           const canOprate =
@@ -134,6 +140,9 @@ export default memo(function List() {
             (['superAdmin', 'admin'].includes(code) ||
               record.author.name === initialState?.user?.name);
           return [
+            <Typography.Link key="copy" onClick={() => handleCopy(record)}>
+              复制
+            </Typography.Link>,
             <Typography.Link key="detail" onClick={() => handlePreview(record)}>
               预览
             </Typography.Link>,
@@ -262,6 +271,18 @@ export default memo(function List() {
 
   const handlePreview = useCallback((record) => {
     setVersionId(record.versionId);
+  }, []);
+
+  const handleCopy = useCallback((record) => {
+    Modal.confirm({
+      title: '复制表单',
+      content: '是否确认复制当前表单？',
+      onOk: async () => {
+        await copy({ versionId: record.versionId });
+        message.success('复制成功');
+        actionRef.current.reloadAndRest();
+      },
+    });
   }, []);
 
   const handleClose = useCallback(() => {

@@ -41,7 +41,7 @@ export default function Form(
 
   return (
     <WujieReact
-      width="100vw"
+      width="100%"
       height="100%"
       name="dynamic-form"
       url={url}
