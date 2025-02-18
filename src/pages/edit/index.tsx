@@ -13,6 +13,7 @@ import { SaveButton } from './saveButton';
 import { useLocation, useHistory, useModel } from 'umi';
 import { Modal, Form, Input, message } from 'antd';
 import { edit, getDetail } from '@/service/article';
+import { compressData, decompressData } from '@/utils/compress';
 
 type InsertFnType = (url: string, alt: string, href: string) => void;
 
@@ -88,9 +89,14 @@ export default memo(
     const handleOk = useCallback(() => {
       if (loading) return;
       setLoading(true);
+      let html = editor.getHtml();
+      if (html === '') {
+        message.warning('请输入内容，空文档无法保存');
+        return;
+      }
       edit({
         id: +location.query.id,
-        html: editor.getHtml(),
+        html: compressData(html),
         title: form.getFieldValue('title'),
       })
         .then(() => {
@@ -113,7 +119,7 @@ export default memo(
         getDetail({
           id: +location.query.id,
         }).then(({ data }) => {
-          setHtml(data.html);
+          setHtml(decompressData(data.html));
           setName(data.name);
           setIsInited(true);
           form.setFieldValue('title', data.title);

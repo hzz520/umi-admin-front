@@ -5,6 +5,7 @@ import { IDomEditor, IEditorConfig } from '@wangeditor/editor';
 import { isEqual } from 'lodash';
 import { useLocation } from 'umi';
 import { getDetail } from '@/service/article';
+import { decompressData } from '@/utils/compress';
 
 export default memo(
   function IndexPage() {
@@ -30,7 +31,7 @@ export default memo(
             id: +history.query.id,
           })
             .then(({ data }) => {
-              setHtml(data.html);
+              setHtml(decompressData(data.html));
             })
             .catch(() => {});
         }
