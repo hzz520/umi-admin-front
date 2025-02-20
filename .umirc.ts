@@ -138,12 +138,6 @@ export default defineConfig({
     },
   ],
   fastRefresh: {},
-  proxy: {
-    '/api': {
-      target: 'http://localhost:82',
-      changeOrigin: true,
-    },
-  },
   outputPath: './admin',
   hash: true,
   manifest: {
@@ -217,5 +211,14 @@ export default defineConfig({
     statsFilename: 'stats.json',
     logLevel: 'info',
     defaultSizes: 'parsed', // stat  // gzip
+  },
+  devServer: {
+    https: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:82',
+        changeOrigin: true,
+      },
+    },
   },
 });
