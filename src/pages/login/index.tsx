@@ -84,6 +84,12 @@ export default memo(function Login() {
     return location.pathname === '/user/changePwd';
   }, [location]);
 
+  const handleKeyDown = useCallback((e) => {
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  }, []);
+
   const handleSubmit = useCallback(() => {
     if (form) {
       form.validateFields().then((data) => {
@@ -149,7 +155,7 @@ export default memo(function Login() {
   }, [initFn]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onKeyDown={handleKeyDown}>
       <Form className="form" form={form} {...layout}>
         <Form.Item noStyle>
           <Tabs

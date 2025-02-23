@@ -213,9 +213,12 @@ export default defineConfig({
     defaultSizes: 'parsed', // stat  // gzip
   },
   devServer: {
-    https: true,
     proxy: {
       '/api': {
+        target: 'http://localhost:82',
+        changeOrigin: true,
+      },
+      '/ws': {
         target: 'http://localhost:82',
         changeOrigin: true,
       },
