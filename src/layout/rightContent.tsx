@@ -1,104 +1,35 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Avatar,
-  Badge,
   Button,
   Dropdown,
   MenuProps,
-  message,
   Modal,
   Space,
   Typography,
 } from 'antd';
 import { useHistory, useModel } from 'umi';
 import { logOut } from '@/service/user';
-import { io, Socket } from 'socket.io-client';
-import { getList } from '../service/chatroom';
+import { getList, edit } from '../service/chatroom';
 import styles from './rightContent.less';
 import dayjs from 'dayjs';
 
 export const RightContent = memo(() => {
   const history = useHistory();
   const { initialState } = useModel('@@initialState');
-  const [open, setOpen] = useState(false);
+  const {
+    open,
+    value,
+    indicateRef,
+    roomInfo,
+    handleChat,
+    handleClose,
+    addEvents,
+    removeEvents,
+    handleKeyDown,
+    handleInput,
+  } = useModel('chatroom', (model) => model);
   const [rooms, setRooms] = useState([]);
-  const [value, setValue] = useState('');
-  const [roomId, setRoomId] = useState('');
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const indicateRef = useRef(null);
-  const handleInput = useCallback(
-    (e) => {
-      setValue(e.target.value);
-    },
-    [setValue],
-  );
-  const handleSubmit = useCallback(async () => {
-    if (!value || !roomId) return;
-    await socket.emit('message', {
-      message: value.replace(/\n+$/, ''),
-    });
-    setValue('');
-  }, [value, setValue, roomId]);
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.keyCode === 13) {
-        if (!e.altKey && !e.metaKey && !e.shiftKey && !e.ctrlKey) {
-          e.preventDefault();
-          handleSubmit();
-          return;
-        }
-
-        setValue(value + '\n');
-      }
-    },
-    [handleSubmit, setValue],
-  );
-  const [roomInfo, setRoomInfo] = useState<
-    Partial<{
-      id: number;
-      name: string;
-      messages: {
-        updateAt: string;
-        message: string;
-        id: number;
-        userId?: number;
-        system: number;
-        user?: {
-          name: string;
-        };
-      }[];
-      users: { updateAt: string; name: string; id: number }[];
-    }>
-  >({});
-
-  const handleChat = useCallback(
-    (id) => {
-      setOpen(true);
-      setRoomId(id);
-      setSocket(
-        io(
-          process.env.NODE_ENV === 'development'
-            ? `http://localhost:82`
-            : 'http://111.231.28.253',
-          {
-            path: '/ws',
-            extraHeaders: {
-              Authorization: localStorage.getItem('token'),
-              roomId: id,
-            },
-          },
-        ),
-      );
-    },
-    [socket],
-  );
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-    setValue('');
-    socket.disconnect();
-    setSocket(null);
-  }, [socket]);
 
   const getRooms = useCallback(() => {
     getList().then(({ data }) => {
@@ -111,40 +42,12 @@ export const RightContent = memo(() => {
   }, [getRooms]);
 
   useEffect(() => {
-    let unauthorized = (error) => {
-      if (
-        error.data.type == 'UnauthorizedError' ||
-        error.data.code == 'invalid_token'
-      ) {
-        // redirect user to login page perhaps?
-        console.log('User token has expired');
-      }
-    };
-    let connect = () => {
-      socket.emit('join');
-    };
-
-    let join = (data) => {
-      setRoomInfo(data);
-      (indicateRef.current as HTMLElement).scrollIntoView();
-    };
-    if (socket) {
-      socket.on('unauthorized', unauthorized);
-      socket.on('connect', connect);
-      socket.on('join', join);
-      socket.on('message', join);
-    }
+    addEvents();
 
     return () => {
-      if (socket) {
-        socket.off('message', join);
-        socket.off('join', join);
-        socket.off('unauthorized', unauthorized);
-        socket.off('connect', connect);
-        socket.close();
-      }
+      removeEvents();
     };
-  }, [socket, indicateRef]);
+  }, [addEvents, removeEvents]);
 
   const menu = useMemo(() => {
     return {

@@ -6,3 +6,10 @@ export async function getList(data = {}) {
     method: 'post',
   });
 }
+
+export async function edit(data = {}) {
+  return request('/chatroom/edit', {
+    data,
+    method: 'post',
+  });
+}

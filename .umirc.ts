@@ -136,6 +136,26 @@ export default defineConfig({
         },
       ],
     },
+    {
+      path: '/chatroom',
+      component: '@/layout/index',
+      icon: 'user',
+      name: '聊天室管理',
+      breadcrumbName: '聊天室管理',
+      routes: [
+        {
+          path: '/chatroom',
+          redirect: '/chatroom/list',
+        },
+        {
+          path: '/chatroom/list',
+          component: '@/pages/chat/index',
+          name: '聊天室列表',
+          breadcrumbName: '聊天室列表',
+          exact: true,
+        },
+      ],
+    },
   ],
   fastRefresh: {},
   outputPath: './admin',
