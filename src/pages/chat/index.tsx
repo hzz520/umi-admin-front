@@ -23,8 +23,11 @@ export default memo(function List() {
 
   const canOprate = useMemo(() => {
     let code = initialState?.user?.role?.code;
-    code !== 'guest' && ['superAdmin', 'admin'].includes(code);
-  }, [initialState]);
+    return code !== 'guest' && ['superAdmin', 'admin'].includes(code);
+  }, [initialState?.user?.role?.code]);
+
+  console.log('initialState', initialState, canOprate);
+
   const handleDetail = useCallback(
     (record) => {
       handleChat(record.id);
