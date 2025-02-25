@@ -10,9 +10,10 @@ import {
 } from 'antd';
 import { useHistory, useModel } from 'umi';
 import { logOut } from '@/service/user';
-import { getList, edit } from '../service/chatroom';
+import { getList } from '../service/chatroom';
 import styles from './rightContent.less';
 import dayjs from 'dayjs';
+import { decompressData } from '@/utils/compress';
 
 export const RightContent = memo(() => {
   const history = useHistory();
@@ -125,13 +126,20 @@ export const RightContent = memo(() => {
       let isSys = !!msg.system;
       let isMyself = msg.userId === initialState.user.id;
       let time = dayjs(msg.updateAt).format('YYYY-MM-DD HH:mm:ss');
+      let __html;
+      try {
+        __html = decompressData(msg.message)?.replace(/\n/g, '<br/>');
+      } catch (error) {
+        __html = msg.message.replace(/\n/g, '<br/>');
+      }
+
       if (isSys) {
         return (
           <div className="message-item system">
             <div
               className="text"
               dangerouslySetInnerHTML={{
-                __html: msg.message.replace(/\n/g, '<br/>'),
+                __html,
               }}
             ></div>
             <div className="time">{time}</div>
@@ -147,7 +155,7 @@ export const RightContent = memo(() => {
             <div
               className="text"
               dangerouslySetInnerHTML={{
-                __html: msg.message.replace(/\n/g, '<br/>'),
+                __html,
               }}
             ></div>
           </div>

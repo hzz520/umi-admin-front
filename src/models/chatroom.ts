@@ -1,3 +1,4 @@
+import { compressData } from '@/utils/compress';
 import { useCallback, useRef, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
 
@@ -64,7 +65,7 @@ export default function useChatRoom() {
   const handleSubmit = useCallback(async () => {
     if (!value || !roomId) return;
     await socket.emit('message', {
-      message: value.replace(/\n+$/, ''),
+      message: compressData(value.replace(/\n+$/, '')),
     });
     setValue('');
   }, [value, setValue, roomId]);
