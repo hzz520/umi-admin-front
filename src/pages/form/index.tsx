@@ -18,6 +18,7 @@ import Wujie from './wujie-form-marking';
 import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { getCateOptions } from '@/service/category';
+import { getWxConfig } from '@/service/wx';
 
 export default memo(function List() {
   const history = useHistory();
@@ -389,6 +390,22 @@ export default memo(function List() {
       </Button>,
     ];
   }, [initialState]);
+
+  const initWx = useCallback(async () => {
+    const data = await getWxConfig({
+      url: window.location.href,
+    });
+
+    (window as any).wx.config({
+      debug: true,
+      ...data,
+      jsApiList: ['chooseImage'],
+    });
+  }, []);
+
+  useEffect(() => {
+    initWx();
+  }, [initWx]);
 
   return (
     <>

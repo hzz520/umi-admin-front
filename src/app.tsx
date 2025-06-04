@@ -9,6 +9,7 @@ import { RightContent } from './layout/rightContent';
 import WujieReact from 'wujie-react';
 import { message } from 'antd';
 import HeaderContent from './layout/headerContent';
+import Vconsole from 'vconsole';
 
 export async function getInitialState() {
   const { data: user } = await getUser();
@@ -48,6 +49,8 @@ export const layout = ({
     ...initialState?.settings,
   };
 };
+
+new Vconsole();
 
 WujieReact.bus.$on('logout', () => {
   message.error('登录失效');

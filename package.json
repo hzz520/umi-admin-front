@@ -37,6 +37,7 @@
     "socket.io-client": "^4.8.1",
     "umi": "^3.5.43",
     "umi-request": "^1.4.0",
+    "vconsole": "^3.15.1",
     "wujie": "^1.0.24",
     "wujie-react": "^1.0.24"
   },

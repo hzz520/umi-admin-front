@@ -7,6 +7,11 @@ export default defineConfig({
       href: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
     },
   ],
+  headScripts: [
+    {
+      src: 'http://res2.wx.qq.com/open/js/jweixin-1.6.0.js',
+    },
+  ],
   404: true,
   layout: {},
   nodeModulesTransform: {
