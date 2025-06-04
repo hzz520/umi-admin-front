@@ -11,7 +11,7 @@
 /dist
 /blog
 /admin
-./admin.tar.gz
+admin.tar.gz
 
 # misc
 .DS_Store
