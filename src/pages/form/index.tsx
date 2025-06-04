@@ -397,7 +397,7 @@ export default memo(function List() {
     });
 
     (window as any).wx.config({
-      debug: true,
+      debug: false,
       ...data,
       jsApiList: ['chooseImage'],
     });
